@@ -16,6 +16,10 @@ namespace XmlTool
 
         // 根节点
         private static XmlElement root = null; 
+		
+		private static string rowPreName = "row_";
+
+        private static string colPreName = "col_";
 
         #region 创建xml文档
         /// <summary>
@@ -112,6 +116,10 @@ namespace XmlTool
         /// <param name="value"></param>
         public static bool SetValue(string rowKey,string colKey,string value)
         {
+			rowKey = rowPreName + rowKey;
+
+            colKey = colPreName + colKey;
+			
             if(xmlDoc==null)
             {
                 return false;
@@ -180,6 +188,11 @@ namespace XmlTool
         /// <returns></returns>
         public static bool ReadXml(string rowKey, string colKey, ref string val)
         {
+			
+			rowKey = rowPreName + rowKey;
+
+            colKey = colPreName + colKey;
+			
             if (xmlDoc == null)
             {
                 return false;
@@ -222,6 +235,10 @@ namespace XmlTool
         /// <returns></returns>
         public static bool DeleteValue(string rowKey, string colKey)
         {
+			rowKey = rowPreName + rowKey;
+
+            colKey = colPreName + colKey;
+			
             if (xmlDoc == null)
             {
                 return false;
