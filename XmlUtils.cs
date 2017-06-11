@@ -30,7 +30,7 @@ namespace XmlTool
         private static List<string> rowName = new List<string>();
 
         // 保存每行的列数
-        private static List<int> colCnt = new List<int>(); 
+        private static List<int> colCnt = new List<int>();
 
         #region 获得属性
         public static int getRowCnt()
@@ -46,6 +46,21 @@ namespace XmlTool
         public static List<int> getColCnt()
         {
             return colCnt;
+        }
+
+        public static List<string> getColName(int rowId)
+        {
+            List<string> temp = new List<string>();
+            if (rowId < 0 || rowId > rowCnt)
+                return null;
+            string row_name = rowName[rowId];
+            XmlElement row = (XmlElement)root.SelectSingleNode(row_name);
+            XmlNodeList cols = row.ChildNodes;
+            foreach(XmlNode col in cols)
+            {
+                temp.Add(col.Name);
+            }
+            return temp;
         }
         #endregion
 
