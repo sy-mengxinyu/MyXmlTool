@@ -344,6 +344,8 @@ namespace XmlTool
                             if(row.ChildNodes.Count == 0)
                             {
                          
+								rowName.RemoveAt(rowName.IndexOf(row.Name));
+						 
                                 root.RemoveChild(row);
 
                                 rowCnt--;
