@@ -17,9 +17,37 @@ namespace XmlTool
         // 根节点
         private static XmlElement root = null; 
 		
+        // 行名称自动前缀
 		private static string rowPreName = "row_";
 
+        // 列名称自动前缀
         private static string colPreName = "col_";
+
+        // 行数
+        private static int rowCnt = 0; 
+
+        // 保存所有行名称
+        private static List<string> rowName = new List<string>();
+
+        // 保存每行的列数
+        private static List<int> colCnt = new List<int>(); 
+
+        #region 获得属性
+        public static int getRowCnt()
+        {
+            return rowCnt;
+        }
+
+        public static List<string> getRowName()
+        {
+            return rowName;
+        }
+
+        public static List<int> getColCnt()
+        {
+            return colCnt;
+        }
+        #endregion
 
         #region 创建xml文档
         /// <summary>
@@ -74,6 +102,20 @@ namespace XmlTool
                     if (root == null)
                         return false;
 
+                    XmlNodeList rows = root.ChildNodes;
+
+                    rowCnt = rows.Count; // 获得行数
+
+                    foreach(XmlNode node in rows)
+                    {
+                        rowName.Add(node.Name);
+
+                        XmlNodeList cols = node.ChildNodes;
+
+                        colCnt.Add(cols.Count); // 获得列数
+                    }
+                    
+
                     return true;
                 }
                 else
@@ -84,6 +126,19 @@ namespace XmlTool
 
                     if (root == null)
                         return false;
+
+                    XmlNodeList rows = root.ChildNodes;
+
+                    rowCnt = rows.Count; // 获得行数
+
+                    foreach (XmlNode node in rows)
+                    {
+                        rowName.Add(node.Name);
+
+                        XmlNodeList cols = node.ChildNodes;
+
+                        colCnt.Add(cols.Count); // 获得列数
+                    }
 
                     return true;
                 }
@@ -145,6 +200,12 @@ namespace XmlTool
 
                     root.AppendChild(newRow);
 
+                    rowCnt++; 
+
+                    rowName.Add(rowKey); 
+
+                    colCnt[rowCnt - 1]++;
+
                     return true;
                 }
                 else
@@ -170,6 +231,8 @@ namespace XmlTool
                     newCol.AppendChild(val);
 
                     row.AppendChild(newCol);
+
+                    colCnt[rowCnt - 1]++;
 
                     return true;
                 }
@@ -261,6 +324,19 @@ namespace XmlTool
                         {
                             row.RemoveChild(col);
 
+                            colCnt[rowName.IndexOf(row.Name)]--;
+
+                            if(row.ChildNodes.Count == 0)
+                            {
+                         
+                                root.RemoveChild(row);
+
+                                rowCnt--;
+
+                                colCnt.RemoveAt(rowCnt);
+
+                            }
+                            
                             return true;
                         }
                     }
