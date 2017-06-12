@@ -371,5 +371,38 @@ namespace XmlTool
         }
 
         #endregion
+		
+		#region 删除某行
+        public static bool DeleteRow(string rowKey)
+        {
+            rowKey = rowPreName + rowKey;
+
+            if (xmlDoc == null)
+            {
+                return false;
+            }
+            else
+            {
+                XmlElement row = (XmlElement)root.SelectSingleNode(rowKey); // 获得指定的行标签，不存在则删除失败
+
+                if (row == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    root.RemoveChild(row);
+
+                    rowCnt--;
+
+                    rowName.RemoveAt(rowName.IndexOf(row.Name.Substring(4)));
+
+                    colCnt.RemoveAt(rowCnt);
+
+                    return true;
+                }
+            }
+        }
+        #endregion
     }
 }
