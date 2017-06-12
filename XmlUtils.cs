@@ -51,15 +51,21 @@ namespace XmlTool
         public static List<string> getColName(int rowId)
         {
             List<string> temp = new List<string>();
+
             if (rowId < 0 || rowId > rowCnt)
                 return null;
+
             string row_name = rowName[rowId];
+
             XmlElement row = (XmlElement)root.SelectSingleNode(row_name);
+
             XmlNodeList cols = row.ChildNodes;
+
             foreach(XmlNode col in cols)
             {
-                temp.Add(col.Name);
+                temp.Add(col.Name.Substring(4));
             }
+
             return temp;
         }
         #endregion
@@ -123,7 +129,7 @@ namespace XmlTool
 
                     foreach(XmlNode node in rows)
                     {
-                        rowName.Add(node.Name);
+                        rowName.Add(node.Name.Substring(4));
 
                         XmlNodeList cols = node.ChildNodes;
 
@@ -148,7 +154,7 @@ namespace XmlTool
 
                     foreach (XmlNode node in rows)
                     {
-                        rowName.Add(node.Name);
+                        rowName.Add(node.Name.Substring(4));
 
                         XmlNodeList cols = node.ChildNodes;
 
@@ -217,7 +223,7 @@ namespace XmlTool
 
                     rowCnt++; 
 
-                    rowName.Add(rowKey); 
+                    rowName.Add(rowKey.Substring(4)); 
 
                     colCnt[rowCnt - 1]++;
 
@@ -339,16 +345,16 @@ namespace XmlTool
                         {
                             row.RemoveChild(col);
 
-                            colCnt[rowName.IndexOf(row.Name)]--;
+                            colCnt[rowName.IndexOf(row.Name.Substring(4))]--;
 
                             if(row.ChildNodes.Count == 0)
                             {
                          
-								rowName.RemoveAt(rowName.IndexOf(row.Name));
-						 
                                 root.RemoveChild(row);
 
                                 rowCnt--;
+
+                                rowName.RemoveAt(rowName.IndexOf(row.Name.Substring(4)));
 
                                 colCnt.RemoveAt(rowCnt);
 
