@@ -15,16 +15,16 @@ namespace XmlTool
         private static XmlDocument xmlDoc = null;
 
         // 根节点
-        private static XmlElement root = null; 
-		
+        private static XmlElement root = null;
+
         // 行名称自动前缀
-		private static string rowPreName = "row_";
+        private static string rowPreName = "row_";
 
         // 列名称自动前缀
         private static string colPreName = "col_";
 
         // 行数
-        private static int rowCnt = 0; 
+        private static int rowCnt = 0;
 
         // 保存所有行名称
         private static List<string> rowName = new List<string>();
@@ -61,7 +61,7 @@ namespace XmlTool
 
             XmlNodeList cols = row.ChildNodes;
 
-            foreach(XmlNode col in cols)
+            foreach (XmlNode col in cols)
             {
                 temp.Add(col.Name.Substring(4));
             }
@@ -78,8 +78,8 @@ namespace XmlTool
         /// <returns></returns>
         public static bool CreateXml(string filePath)
         {
-    
-            if(!File.Exists(filePath)) // 如果不存在该文件，则创建，并生成根节点
+
+            if (!File.Exists(filePath)) // 如果不存在该文件，则创建，并生成根节点
             {
                 xmlDoc = new XmlDocument();
 
@@ -106,13 +106,13 @@ namespace XmlTool
         /// <returns></returns>
         public static bool LoadXml(string filePath)
         {
-            if(!File.Exists(filePath)) // 如果不存在，则载入失败
+            if (!File.Exists(filePath)) // 如果不存在，则载入失败
             {
                 return false;
             }
             else
             {
-                if( xmlDoc == null )
+                if (xmlDoc == null)
                 {
                     xmlDoc = new XmlDocument();
 
@@ -127,7 +127,7 @@ namespace XmlTool
 
                     rowCnt = rows.Count; // 获得行数
 
-                    foreach(XmlNode node in rows)
+                    foreach (XmlNode node in rows)
                     {
                         rowName.Add(node.Name.Substring(4));
 
@@ -135,7 +135,7 @@ namespace XmlTool
 
                         colCnt.Add(cols.Count); // 获得列数
                     }
-                    
+
 
                     return true;
                 }
@@ -143,7 +143,7 @@ namespace XmlTool
                 {
                     xmlDoc.Load(filePath);
 
-                    root =(XmlElement)xmlDoc.SelectSingleNode("root"); // 读取根节点
+                    root = (XmlElement)xmlDoc.SelectSingleNode("root"); // 读取根节点
 
                     if (root == null)
                         return false;
@@ -176,7 +176,7 @@ namespace XmlTool
         {
             if (xmlDoc == null)
                 return false;
-           
+
             xmlDoc.Save(filePath);
 
             return true;
@@ -190,13 +190,13 @@ namespace XmlTool
         /// <param name="rowKeyName">行首关键字，不存在则添加</param>
         /// <param name="colKeyName">列首关键字，不存在则添加</param>
         /// <param name="value"></param>
-        public static bool SetValue(string rowKey,string colKey,string value)
+        public static bool SetValue(string rowKey, string colKey, string value)
         {
-			rowKey = rowPreName + rowKey;
+            rowKey = rowPreName + rowKey;
 
             colKey = colPreName + colKey;
-			
-            if(xmlDoc==null)
+
+            if (xmlDoc == null)
             {
                 return false;
             }
@@ -204,9 +204,9 @@ namespace XmlTool
             {
                 XmlElement row = (XmlElement)root.SelectSingleNode(rowKey); // 获得指定的行标签
 
-                if(row == null) // 如果不存在则创建
+                if (row == null) // 如果不存在则创建
                 {
-                   
+
                     XmlElement newRow = xmlDoc.CreateElement(rowKey);
 
                     XmlElement newCol = xmlDoc.CreateElement(colKey);
@@ -221,21 +221,21 @@ namespace XmlTool
 
                     root.AppendChild(newRow);
 
-                    rowCnt++; 
+                    rowCnt++;
 
-                    rowName.Add(rowKey.Substring(4)); 
+                    rowName.Add(rowKey.Substring(4));
 
-                    colCnt[rowCnt - 1]++;
+                    colCnt.Add(1);
 
                     return true;
                 }
                 else
                 {
-                   
-                    foreach(XmlElement col in row.ChildNodes) // 查找指定的列标签，不存在则创建
+
+                    foreach (XmlElement col in row.ChildNodes) // 查找指定的列标签，不存在则创建
                     {
-                       
-                        if(col.Name == colKey)
+
+                        if (col.Name == colKey)
                         {
                             col.FirstChild.InnerText = value;
 
@@ -253,11 +253,11 @@ namespace XmlTool
 
                     row.AppendChild(newCol);
 
-                    colCnt[rowCnt - 1]++;
+                    colCnt[ rowName.IndexOf(row.Name)- 1]++;
 
                     return true;
                 }
-                
+
             }
         }
         #endregion
@@ -272,11 +272,11 @@ namespace XmlTool
         /// <returns></returns>
         public static bool ReadXml(string rowKey, string colKey, ref string val)
         {
-			
-			rowKey = rowPreName + rowKey;
+
+            rowKey = rowPreName + rowKey;
 
             colKey = colPreName + colKey;
-			
+
             if (xmlDoc == null)
             {
                 return false;
@@ -319,10 +319,10 @@ namespace XmlTool
         /// <returns></returns>
         public static bool DeleteValue(string rowKey, string colKey)
         {
-			rowKey = rowPreName + rowKey;
+            rowKey = rowPreName + rowKey;
 
             colKey = colPreName + colKey;
-			
+
             if (xmlDoc == null)
             {
                 return false;
@@ -347,9 +347,9 @@ namespace XmlTool
 
                             colCnt[rowName.IndexOf(row.Name.Substring(4))]--;
 
-                            if(row.ChildNodes.Count == 0)
+                            if (row.ChildNodes.Count == 0)
                             {
-                         
+
                                 root.RemoveChild(row);
 
                                 rowCnt--;
@@ -359,7 +359,7 @@ namespace XmlTool
                                 colCnt.RemoveAt(rowCnt);
 
                             }
-                            
+
                             return true;
                         }
                     }
@@ -371,8 +371,8 @@ namespace XmlTool
         }
 
         #endregion
-		
-	#region 删除某行
+
+        #region 删除某行
         public static bool DeleteRow(string rowKey)
         {
             rowKey = rowPreName + rowKey;
