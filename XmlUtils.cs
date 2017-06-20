@@ -1,4 +1,7 @@
-﻿using System;
+﻿/*
+作者：吴辉
+*/
+using System;
 using System.IO;
 using System.Xml;
 using System.Linq;
