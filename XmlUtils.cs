@@ -115,6 +115,10 @@ namespace XmlTool
             }
             else
             {
+                rowCnt = 0;
+                rowName.Clear();
+                colCnt.Clear();
+                
                 if (xmlDoc == null)
                 {
                     xmlDoc = new XmlDocument();
